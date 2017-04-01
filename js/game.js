@@ -4,6 +4,13 @@
 
   Game = {
     init: function() {
+      this.storage = localStorage;
+      if (typeof this.storage.highestScore === 'undefined') {
+        this.storage.highestScore = 0;
+      }
+      this.highestScore = parseInt(this.storage.highestScore);
+      this.score = 0;
+      this.updateScore();
       $('section').hide();
       $('section#start-game').show();
       $('a#start').click(function(ev) {
@@ -67,7 +74,12 @@
       });
     },
     updateScore: function() {
-      return $('#score').html(this.score);
+      if (Game.score > Game.highestScore) {
+        Game.storage.highestScore = Game.score;
+        Game.highestScore = Game.score;
+      }
+      $('#highest-score').html(Game.highestScore);
+      return $('#score').html(Game.score);
     },
     correctAnswer: function() {
       this.score++;

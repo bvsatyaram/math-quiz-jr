@@ -1,5 +1,11 @@
 Game =
   init: ->
+    @storage = localStorage
+    if (typeof(@storage.highestScore) == 'undefined')
+      @storage.highestScore = 0
+    @highestScore = parseInt(@storage.highestScore)
+    @score = 0
+    @updateScore()
     $('section').hide()
     $('section#start-game').show()
     $('a#start').click (ev) ->
@@ -44,7 +50,11 @@ Game =
       else
         Game.wrongAnswer()
   updateScore: ->
-    $('#score').html(@score)
+    if Game.score > Game.highestScore
+      Game.storage.highestScore = Game.score
+      Game.highestScore = Game.score
+    $('#highest-score').html(Game.highestScore)
+    $('#score').html(Game.score)
   correctAnswer: ->
     @score++
     @updateScore()
